@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Scanner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>QR Scanner</h1>
+    <p>(Pretty obvious...)</p>
+    <p>How to scan: When the camera is on, take the QR code and show it at the center of the capture.  Not 
+        too close and not too far.
+    </p>
+    <div id="container">
+        <video id="scanner"></video><br>
+        <button id="onSwitch">Scan</button>
+        <button id="offSwitch">Stop</button><br>
+        <p>Result: <a id="result" href=""></a></p>
+    </div>
+    
+
+    <p> &copy; 2022 Practice Site by Ryan Park. QR Code Scanner library found on snyk Advisor.</p>
+    
+ 
+    <script src="behavior.js"></script>
+    <script type="module">
+        import QrScanner from './qr-scanner.min.js';
+        // do something with QrScanner
+        var scanner = document.querySelector("#scanner");
+        var onSwitch = document.querySelector("#onSwitch");
+        var offSwitch = document.querySelector("#offSwitch");
+        offSwitch.disabled = true;
+        var linkResult = document.querySelector("#result");
+        const qrScanner = new QrScanner(scanner, result => {
+            //this.stop();
+            linkResult.textContent = result;
+            linkResult.href= result;
+            qrScanner.stop();
+            onSwitch.disabled = false;
+            offSwitch.disabled = true;
+        });
+        qrScanner.setCamera("user"); // async
+        onSwitch.addEventListener("click",function(){
+            qrScanner.start();
+            this.disabled = true;
+            offSwitch.disabled = false;
+        });
+        offSwitch.addEventListener("click",function(){
+            qrScanner.stop();
+            onSwitch.disabled = false;
+            this.disabled = true
+        });
+
+    </script>
+</body>
+</html>
